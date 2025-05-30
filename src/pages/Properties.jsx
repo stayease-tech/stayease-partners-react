@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Sidebar from "../components/global-components/Sidebar";
-import Navbar from "../components/global-components/Navbar";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
     Building2, 
     MapPin, 
-    Bed, 
-    Bath, 
-    Car, 
     Eye, 
     Edit3, 
     Plus, 
     Search,
-    Filter,
     Star,
     Users,
-    IndianRupee,
-    Calendar,
-    ChevronRight,
-    Wifi,
-    Coffee,
-    Shield,
-    Zap
-} from "lucide-react";
-import axios from 'axios';
+    IndianRupee} from "lucide-react";
+import MainLayout from "../components/layout/MainLayout";
 
 function Properties({ isExpanded, setIsExpanded }) {
     const navigate = useNavigate();
@@ -221,180 +208,154 @@ function Properties({ isExpanded, setIsExpanded }) {
     );
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
-            <Sidebar isExpanded={isExpanded} toggleSidebar={() => setIsExpanded(!isExpanded)} />
-
-            <div className="flex-1 transition-all duration-300">
-                <Navbar isExpanded={isExpanded} />
-
-                <div className={`
-                    text-white transition-all duration-300
-                    ${isExpanded ? 'pl-[6rem] md:pl-[18rem]' : 'pl-10 md:pl-[6rem]'} 
-                    pt-20 pr-[2rem] pb-8
-                `}>
-                    {/* Header Section */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+        <MainLayout 
+            title="My Properties"
+            description="Manage and monitor your property listings"
+        >
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4">
+                    <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-[#eba312] via-yellow-400 to-[#eba312] bg-clip-text text-transparent mb-2">
-                                My Properties
-                            </h1>
-                            <p className="text-gray-400 text-sm lg:text-base">
-                                Manage and monitor your property listings
+                            <p className="text-gray-400 text-sm">Total Properties</p>
+                            <p className="text-2xl font-bold text-white">{properties.length}</p>
+                        </div>
+                        <div className="p-3 bg-[#eba312]/20 rounded-lg">
+                            <Building2 size={20} className="text-[#eba312]" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-gray-400 text-sm">Avg. Occupancy</p>
+                            <p className="text-2xl font-bold text-white">
+                                {properties.length > 0 ? Math.round(properties.reduce((acc, prop) => acc + prop.occupancy, 0) / properties.length) : 0}%
                             </p>
                         </div>
-                        
-                        <button className="mt-4 sm:mt-0 px-6 py-3 bg-gradient-to-r from-[#eba312] to-[#d4941a] hover:from-[#d4941a] hover:to-[#eba312] text-black font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-[#eba312]/25 hover:scale-105 flex items-center space-x-2">
-                            <Plus size={18} />
-                            <span>Add Property</span>
-                        </button>
-                    </div>
-
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                        <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-gray-400 text-sm">Total Properties</p>
-                                    <p className="text-2xl font-bold text-white">{properties.length}</p>
-                                </div>
-                                <div className="p-3 bg-[#eba312]/20 rounded-lg">
-                                    <Building2 size={20} className="text-[#eba312]" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-gray-400 text-sm">Avg. Occupancy</p>
-                                    <p className="text-2xl font-bold text-white">
-                                        {properties.length > 0 ? Math.round(properties.reduce((acc, prop) => acc + prop.occupancy, 0) / properties.length) : 0}%
-                                    </p>
-                                </div>
-                                <div className="p-3 bg-green-500/20 rounded-lg">
-                                    <Users size={20} className="text-green-400" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-gray-400 text-sm">Monthly Revenue</p>
-                                    <p className="text-2xl font-bold text-white">
-                                        ₹{properties.reduce((acc, prop) => acc + (prop.rent * prop.rooms * (prop.occupancy / 100)), 0).toLocaleString()}
-                                    </p>
-                                </div>
-                                <div className="p-3 bg-blue-500/20 rounded-lg">
-                                    <IndianRupee size={20} className="text-blue-400" />
-                                </div>
-                            </div>
+                        <div className="p-3 bg-green-500/20 rounded-lg">
+                            <Users size={20} className="text-green-400" />
                         </div>
                     </div>
+                </div>
 
-                    {/* Search and Filters */}
-                    <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                        {/* Search Bar */}
-                        <div className="relative flex-1">
-                            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search properties by name or location..."
-                                value={searchTerm}
-                                onChange={handleSearchChange}
-                                className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300"
-                            />
-                        </div>
-
-                        {/* Filter Buttons */}
-                        <div className="flex space-x-2">
-                            {["all", "PG", "Apartment"].map((type) => (
-                                <button
-                                    key={type}
-                                    onClick={() => handleFilterChange(type)}
-                                    className={`px-4 py-3 rounded-xl font-medium transition-all duration-300 capitalize ${
-                                        filterType === type
-                                            ? 'bg-[#eba312] text-black shadow-lg'
-                                            : 'bg-gray-900/50 text-gray-300 border border-gray-700/50 hover:border-[#eba312]/30 hover:text-[#eba312]'
-                                    }`}
-                                >
-                                    {type === "all" ? "All Types" : type}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Properties Grid */}
-                    {isLoading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {[...Array(6)].map((_, index) => (
-                                <LoadingCard key={index} />
-                            ))}
-                        </div>
-                    ) : filteredProperties.length === 0 ? (
-                        <div className="text-center py-16">
-                            <div className="w-24 h-24 mx-auto mb-6 bg-gray-800/50 rounded-full flex items-center justify-center">
-                                <Building2 size={32} className="text-gray-500" />
-                            </div>
-                            <h3 className="text-xl font-semibold text-gray-300 mb-2">No Properties Found</h3>
-                            <p className="text-gray-500 mb-6">
-                                {searchTerm || filterType !== "all" 
-                                    ? "Try adjusting your search or filters" 
-                                    : "Get started by adding your first property"
-                                }
+                <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-gray-400 text-sm">Monthly Revenue</p>
+                            <p className="text-2xl font-bold text-white">
+                                ₹{properties.reduce((acc, prop) => acc + (prop.rent * prop.rooms * (prop.occupancy / 100)), 0).toLocaleString()}
                             </p>
-                            <button className="px-6 py-3 bg-gradient-to-r from-[#eba312] to-[#d4941a] text-black font-semibold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-2 mx-auto">
-                                <Plus size={18} />
-                                <span>Add Your First Property</span>
-                            </button>
                         </div>
-                    ) : (
-                        <>
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-                                {paginatedProperties.map((property) => (
-                                    <PropertyCard key={property.id} property={property} />
-                                ))}
-                            </div>
-
-                            {/* Pagination */}
-                            {totalPages > 1 && (
-                                <div className="flex justify-center items-center space-x-2">
-                                    <button
-                                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                                        disabled={currentPage === 1}
-                                        className="px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-gray-300 hover:text-[#eba312] hover:border-[#eba312]/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                                    >
-                                        Previous
-                                    </button>
-
-                                    {[...Array(totalPages)].map((_, index) => (
-                                        <button
-                                            key={index + 1}
-                                            onClick={() => setCurrentPage(index + 1)}
-                                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                                                currentPage === index + 1
-                                                    ? 'bg-[#eba312] text-black shadow-lg'
-                                                    : 'bg-gray-900/50 border border-gray-700/50 text-gray-300 hover:text-[#eba312] hover:border-[#eba312]/30'
-                                            }`}
-                                        >
-                                            {index + 1}
-                                        </button>
-                                    ))}
-
-                                    <button
-                                        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                                        disabled={currentPage === totalPages}
-                                        className="px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-gray-300 hover:text-[#eba312] hover:border-[#eba312]/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                                    >
-                                        Next
-                                    </button>
-                                </div>
-                            )}
-                        </>
-                    )}
+                        <div className="p-3 bg-blue-500/20 rounded-lg">
+                            <IndianRupee size={20} className="text-blue-400" />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            {/* Search and Filters */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                {/* Search Bar */}
+                <div className="relative flex-1">
+                    <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                        type="text"
+                        placeholder="Search properties by name or location..."
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300"
+                    />
+                </div>
+
+                {/* Filter Buttons */}
+                <div className="flex space-x-2">
+                    {["all", "PG", "Apartment"].map((type) => (
+                        <button
+                            key={type}
+                            onClick={() => handleFilterChange(type)}
+                            className={`px-4 py-3 rounded-xl font-medium transition-all duration-300 capitalize ${
+                                filterType === type
+                                    ? 'bg-[#eba312] text-black shadow-lg'
+                                    : 'bg-gray-900/50 text-gray-300 border border-gray-700/50 hover:border-[#eba312]/30 hover:text-[#eba312]'
+                            }`}
+                        >
+                            {type === "all" ? "All Types" : type}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Properties Grid */}
+            {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {[...Array(6)].map((_, index) => (
+                        <LoadingCard key={index} />
+                    ))}
+                </div>
+            ) : filteredProperties.length === 0 ? (
+                <div className="text-center py-16">
+                    <div className="w-24 h-24 mx-auto mb-6 bg-gray-800/50 rounded-full flex items-center justify-center">
+                        <Building2 size={32} className="text-gray-500" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-300 mb-2">No Properties Found</h3>
+                    <p className="text-gray-500 mb-6">
+                        {searchTerm || filterType !== "all" 
+                            ? "Try adjusting your search or filters" 
+                            : "Get started by adding your first property"
+                        }
+                    </p>
+                    <button className="px-6 py-3 bg-gradient-to-r from-[#eba312] to-[#d4941a] text-black font-semibold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-2 mx-auto">
+                        <Plus size={18} />
+                        <span>Add Your First Property</span>
+                    </button>
+                </div>
+            ) : (
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+                        {paginatedProperties.map((property) => (
+                            <PropertyCard key={property.id} property={property} />
+                        ))}
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                        <div className="flex justify-center items-center space-x-2">
+                            <button
+                                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-gray-300 hover:text-[#eba312] hover:border-[#eba312]/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                            >
+                                Previous
+                            </button>
+
+                            {[...Array(totalPages)].map((_, index) => (
+                                <button
+                                    key={index + 1}
+                                    onClick={() => setCurrentPage(index + 1)}
+                                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                                        currentPage === index + 1
+                                            ? 'bg-[#eba312] text-black shadow-lg'
+                                            : 'bg-gray-900/50 border border-gray-700/50 text-gray-300 hover:text-[#eba312] hover:border-[#eba312]/30'
+                                    }`}
+                                >
+                                    {index + 1}
+                                </button>
+                            ))}
+
+                            <button
+                                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-gray-300 hover:text-[#eba312] hover:border-[#eba312]/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
+                </>
+            )}
+        </MainLayout>
     );
 }
 

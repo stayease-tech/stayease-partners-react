@@ -1,6 +1,5 @@
-import Sidebar from "../components/global-components/Sidebar";
-import Navbar from "../components/global-components/Navbar";
 import { FileText, CheckCircle, AlertCircle, Eye, Download, Shield } from "lucide-react";
+import MainLayout from "../components/layout/MainLayout";
 
 function KycDetails({ isExpanded, setIsExpanded }) {
     const aadharData = {
@@ -99,104 +98,79 @@ function KycDetails({ isExpanded, setIsExpanded }) {
     );
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
-            <Sidebar isExpanded={isExpanded} toggleSidebar={() => setIsExpanded(!isExpanded)} />
-
-            <div className="flex-1 transition-all duration-300">
-                <Navbar isExpanded={isExpanded} />
-
-                <div className={`
-                    text-white transition-all duration-300
-                    ${isExpanded ? 'pl-[6rem] md:pl-[18rem]' : 'pl-10 md:pl-[6rem]'} 
-                    pt-20 pr-[2rem] pb-8
-                `}>
-                    {/* Header Section */}
-                    <div className="mb-8">
-                        <div className="flex items-center justify-between mb-2">
-                            <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-[#eba312] via-yellow-400 to-[#eba312] bg-clip-text text-transparent">
-                                KYC Details
-                            </h1>
-                            <div className="flex items-center space-x-2">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-sm text-green-400 font-medium">All Verified</span>
-                            </div>
-                        </div>
-                        <p className="text-gray-400 text-sm lg:text-base">
-                            Your identity verification documents and status
-                        </p>
+        <MainLayout 
+            title="KYC Details"
+            description="Your identity verification documents and status"
+        >
+            {/* Verification Status Summary */}
+            <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 border border-green-500/30 rounded-2xl p-6 mb-8">
+                <div className="flex items-center space-x-3 mb-4">
+                    <div className="p-3 bg-green-500/20 rounded-xl">
+                        <Shield size={24} className="text-green-400" />
                     </div>
-
-                    {/* Verification Status Summary */}
-                    <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 border border-green-500/30 rounded-2xl p-6 mb-8">
-                        <div className="flex items-center space-x-3 mb-4">
-                            <div className="p-3 bg-green-500/20 rounded-xl">
-                                <Shield size={24} className="text-green-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-bold text-white">Verification Complete</h3>
-                                <p className="text-green-400 text-sm">All your documents have been verified successfully</p>
-                            </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div className="text-center p-4 bg-green-500/10 rounded-xl border border-green-500/20">
-                                <div className="text-2xl font-bold text-green-400">2</div>
-                                <div className="text-sm text-gray-300">Documents Verified</div>
-                            </div>
-                            <div className="text-center p-4 bg-green-500/10 rounded-xl border border-green-500/20">
-                                <div className="text-2xl font-bold text-green-400">100%</div>
-                                <div className="text-sm text-gray-300">Completion Rate</div>
-                            </div>
-                            <div className="text-center p-4 bg-green-500/10 rounded-xl border border-green-500/20">
-                                <div className="text-2xl font-bold text-green-400">Active</div>
-                                <div className="text-sm text-gray-300">Account Status</div>
-                            </div>
-                        </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-white">Verification Complete</h3>
+                        <p className="text-green-400 text-sm">All your documents have been verified successfully</p>
                     </div>
-
-                    {/* Document Cards */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <DocumentCard 
-                            title="Aadhar Card Details"
-                            data={aadharData}
-                            icon={<Shield size={20} className="text-[#eba312]" />}
-                        />
-                        
-                        <DocumentCard 
-                            title="PAN Card Details"
-                            data={panData}
-                            icon={<FileText size={20} className="text-[#eba312]" />}
-                        />
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="text-center p-4 bg-green-500/10 rounded-xl border border-green-500/20">
+                        <div className="text-2xl font-bold text-green-400">2</div>
+                        <div className="text-sm text-gray-300">Documents Verified</div>
                     </div>
-
-                    {/* Additional Information */}
-                    <div className="mt-8 bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6">
-                        <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-                            <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
-                            Important Information
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
-                            <div>
-                                <h4 className="font-semibold text-[#eba312] mb-2">Document Requirements:</h4>
-                                <ul className="space-y-1 list-disc list-inside">
-                                    <li>Clear, readable scanned copies</li>
-                                    <li>Valid and non-expired documents</li>
-                                    <li>Both front and back sides required</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="font-semibold text-[#eba312] mb-2">Verification Process:</h4>
-                                <ul className="space-y-1 list-disc list-inside">
-                                    <li>Automatic verification within 24 hours</li>
-                                    <li>Email notification upon completion</li>
-                                    <li>Manual review if automatic fails</li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div className="text-center p-4 bg-green-500/10 rounded-xl border border-green-500/20">
+                        <div className="text-2xl font-bold text-green-400">100%</div>
+                        <div className="text-sm text-gray-300">Completion Rate</div>
+                    </div>
+                    <div className="text-center p-4 bg-green-500/10 rounded-xl border border-green-500/20">
+                        <div className="text-2xl font-bold text-green-400">Active</div>
+                        <div className="text-sm text-gray-300">Account Status</div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            {/* Document Cards */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <DocumentCard 
+                    title="Aadhar Card Details"
+                    data={aadharData}
+                    icon={<Shield size={20} className="text-[#eba312]" />}
+                />
+                
+                <DocumentCard 
+                    title="PAN Card Details"
+                    data={panData}
+                    icon={<FileText size={20} className="text-[#eba312]" />}
+                />
+            </div>
+
+            {/* Additional Information */}
+            <div className="mt-8 bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6">
+                <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                    <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
+                    Important Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
+                    <div>
+                        <h4 className="font-semibold text-[#eba312] mb-2">Document Requirements:</h4>
+                        <ul className="space-y-1 list-disc list-inside">
+                            <li>Clear, readable scanned copies</li>
+                            <li>Valid and non-expired documents</li>
+                            <li>Both front and back sides required</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold text-[#eba312] mb-2">Verification Process:</h4>
+                        <ul className="space-y-1 list-disc list-inside">
+                            <li>Automatic verification within 24 hours</li>
+                            <li>Email notification upon completion</li>
+                            <li>Manual review if automatic fails</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </MainLayout>
     );
 }
 

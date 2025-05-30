@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import Sidebar from "../components/global-components/Sidebar";
-import Navbar from "../components/global-components/Navbar";
 import { User, Phone, Mail, MapPin, Calendar, Users, Edit3, Save, X } from "lucide-react";
+import MainLayout from '../components/layout/MainLayout';
 
 function OwnerDetails({ isExpanded, setIsExpanded }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -110,186 +109,167 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
     );
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
-            <Sidebar isExpanded={isExpanded} toggleSidebar={() => setIsExpanded(!isExpanded)} />
+        <MainLayout 
+            title="Profile Settings"
+            description="Manage your personal information and account settings"
+        >
+            {/* Header Section */}
+            <div className="flex space-x-3 mb-2">
+                {isEditing ? (
+                    <>
+                        <button
+                            onClick={handleSave}
+                            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-green-500/25"
+                        >
+                            <Save size={16} />
+                            <span>Save Changes</span>
+                        </button>
+                        <button
+                            onClick={handleCancel}
+                            className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-xl transition-all duration-300"
+                        >
+                            <X size={16} />
+                            <span>Cancel</span>
+                        </button>
+                    </>
+                ) : (
+                    <button
+                        onClick={handleEdit}
+                        className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#eba312] to-[#d4941a] hover:from-[#d4941a] hover:to-[#eba312] text-black font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-[#eba312]/25"
+                    >
+                        <Edit3 size={16} />
+                        <span>Edit Profile</span>
+                    </button>
+                )}
+            </div>
 
-            <div className="flex-1 transition-all duration-300">
-                <Navbar isExpanded={isExpanded} />
-
-                <div className={`
-                    text-white transition-all duration-300
-                    ${isExpanded ? 'pl-[6rem] md:pl-[18rem]' : 'pl-10 md:pl-[6rem]'} 
-                    pt-20 pr-[2rem] pb-8
-                `}>
-                    {/* Header Section */}
-                    <div className="mb-8">
-                        <div className="flex items-center justify-between mb-2">
-                            <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-[#eba312] via-yellow-400 to-[#eba312] bg-clip-text text-transparent">
-                                Profile Settings
-                            </h1>
-                            <div className="flex space-x-3">
-                                {isEditing ? (
-                                    <>
-                                        <button
-                                            onClick={handleSave}
-                                            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-green-500/25"
-                                        >
-                                            <Save size={16} />
-                                            <span>Save Changes</span>
-                                        </button>
-                                        <button
-                                            onClick={handleCancel}
-                                            className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-xl transition-all duration-300"
-                                        >
-                                            <X size={16} />
-                                            <span>Cancel</span>
-                                        </button>
-                                    </>
-                                ) : (
-                                    <button
-                                        onClick={handleEdit}
-                                        className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#eba312] to-[#d4941a] hover:from-[#d4941a] hover:to-[#eba312] text-black font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-[#eba312]/25"
-                                    >
-                                        <Edit3 size={16} />
-                                        <span>Edit Profile</span>
-                                    </button>
-                                )}
-                            </div>
+            {/* Profile Header Card */}
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6 mb-8 hover:border-[#eba312]/30 transition-all duration-300">
+                <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <div className="relative">
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#eba312] to-[#d4941a] rounded-full flex items-center justify-center shadow-xl">
+                            <User size={32} className="text-white" />
                         </div>
-                        <p className="text-gray-400 text-sm lg:text-base">
-                            Manage your personal information and account settings
-                        </p>
-                    </div>
-
-                    {/* Profile Header Card */}
-                    <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6 mb-8 hover:border-[#eba312]/30 transition-all duration-300">
-                        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
-                            <div className="relative">
-                                <div className="w-20 h-20 bg-gradient-to-br from-[#eba312] to-[#d4941a] rounded-full flex items-center justify-center shadow-xl">
-                                    <User size={32} className="text-white" />
-                                </div>
-                                <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-gray-900 flex items-center justify-center">
-                                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                                </div>
-                            </div>
-                            
-                            <div className="flex-1 text-center sm:text-left">
-                                <h2 className="text-2xl font-bold text-white">{formData.name}</h2>
-                                <p className="text-gray-400">{formData.email}</p>
-                                <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
-                                    {profileStats.map((stat, index) => (
-                                        <div key={index} className="flex items-center space-x-1 bg-gray-800/50 px-3 py-1 rounded-full">
-                                            {stat.icon}
-                                            <span className="text-sm text-gray-300">{stat.value}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                        <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-gray-900 flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
                         </div>
                     </div>
-
-                    {/* Personal Information */}
-                    <div className="mb-8">
-                        <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-                            <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
-                            Personal Information
-                        </h3>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <ProfileField 
-                                icon={<User size={16} className="text-[#eba312]" />}
-                                label="Full Name"
-                                value={formData.name}
-                                field="name"
-                            />
-                            
-                            <ProfileField 
-                                icon={<Phone size={16} className="text-[#eba312]" />}
-                                label="Phone Number"
-                                value={formData.phone}
-                                field="phone"
-                                type="tel"
-                            />
-                            
-                            <ProfileField 
-                                icon={<Mail size={16} className="text-[#eba312]" />}
-                                label="Email Address"
-                                value={formData.email}
-                                field="email"
-                                type="email"
-                            />
-                            
-                            <ProfileField 
-                                icon={<Calendar size={16} className="text-[#eba312]" />}
-                                label="Date of Birth"
-                                value={formData.dateOfBirth}
-                                field="dateOfBirth"
-                                type="date"
-                            />
-                            
-                            <ProfileField 
-                                icon={<Users size={16} className="text-[#eba312]" />}
-                                label="Gender"
-                                value={formData.gender}
-                                field="gender"
-                                type="select"
-                            />
-                            
-                            <ProfileField 
-                                icon={<MapPin size={16} className="text-[#eba312]" />}
-                                label="Address"
-                                value={formData.address}
-                                field="address"
-                                type="textarea"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Account Security */}
-                    <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6">
-                        <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-                            <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
-                            Account Security
-                        </h3>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-4">
-                                <h4 className="font-semibold text-[#eba312]">Security Status</h4>
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-300">Phone Verified</span>
-                                        <span className="text-green-400 text-sm">✓ Verified</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-300">Email Verified</span>
-                                        <span className="text-green-400 text-sm">✓ Verified</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-300">KYC Completed</span>
-                                        <span className="text-green-400 text-sm">✓ Completed</span>
-                                    </div>
+                    
+                    <div className="flex-1 text-center sm:text-left">
+                        <h2 className="text-2xl font-bold text-white">{formData.name}</h2>
+                        <p className="text-gray-400">{formData.email}</p>
+                        <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
+                            {profileStats.map((stat, index) => (
+                                <div key={index} className="flex items-center space-x-1 bg-gray-800/50 px-3 py-1 rounded-full">
+                                    {stat.icon}
+                                    <span className="text-sm text-gray-300">{stat.value}</span>
                                 </div>
-                            </div>
-                            
-                            <div className="space-y-4">
-                                <h4 className="font-semibold text-[#eba312]">Quick Actions</h4>
-                                <div className="space-y-2">
-                                    <button className="w-full text-left px-3 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-300 text-gray-300 hover:text-[#eba312] text-sm">
-                                        Change Password
-                                    </button>
-                                    <button className="w-full text-left px-3 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-300 text-gray-300 hover:text-[#eba312] text-sm">
-                                        Update Notifications
-                                    </button>
-                                    <button className="w-full text-left px-3 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-300 text-gray-300 hover:text-[#eba312] text-sm">
-                                        Privacy Settings
-                                    </button>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            {/* Personal Information */}
+            <div className="mb-8">
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+                    <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
+                    Personal Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <ProfileField 
+                        icon={<User size={16} className="text-[#eba312]" />}
+                        label="Full Name"
+                        value={formData.name}
+                        field="name"
+                    />
+                    
+                    <ProfileField 
+                        icon={<Phone size={16} className="text-[#eba312]" />}
+                        label="Phone Number"
+                        value={formData.phone}
+                        field="phone"
+                        type="tel"
+                    />
+                    
+                    <ProfileField 
+                        icon={<Mail size={16} className="text-[#eba312]" />}
+                        label="Email Address"
+                        value={formData.email}
+                        field="email"
+                        type="email"
+                    />
+                    
+                    <ProfileField 
+                        icon={<Calendar size={16} className="text-[#eba312]" />}
+                        label="Date of Birth"
+                        value={formData.dateOfBirth}
+                        field="dateOfBirth"
+                        type="date"
+                    />
+                    
+                    <ProfileField 
+                        icon={<Users size={16} className="text-[#eba312]" />}
+                        label="Gender"
+                        value={formData.gender}
+                        field="gender"
+                        type="select"
+                    />
+                    
+                    <ProfileField 
+                        icon={<MapPin size={16} className="text-[#eba312]" />}
+                        label="Address"
+                        value={formData.address}
+                        field="address"
+                        type="textarea"
+                    />
+                </div>
+            </div>
+
+            {/* Account Security */}
+            <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6">
+                <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                    <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
+                    Account Security
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                        <h4 className="font-semibold text-[#eba312]">Security Status</h4>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <span className="text-gray-300">Phone Verified</span>
+                                <span className="text-green-400 text-sm">✓ Verified</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-gray-300">Email Verified</span>
+                                <span className="text-green-400 text-sm">✓ Verified</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-gray-300">KYC Completed</span>
+                                <span className="text-green-400 text-sm">✓ Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                        <h4 className="font-semibold text-[#eba312]">Quick Actions</h4>
+                        <div className="space-y-2">
+                            <button className="w-full text-left px-3 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-300 text-gray-300 hover:text-[#eba312] text-sm">
+                                Change Password
+                            </button>
+                            <button className="w-full text-left px-3 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-300 text-gray-300 hover:text-[#eba312] text-sm">
+                                Update Notifications
+                            </button>
+                            <button className="w-full text-left px-3 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-300 text-gray-300 hover:text-[#eba312] text-sm">
+                                Privacy Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </MainLayout>
     );
 }
 
