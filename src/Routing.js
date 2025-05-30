@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Login from "./components/Login";
-import Home from "./components/section-components/Home";
 import Properties from "./components/section-components/Properties";
 import KycDetails from "./components/section-components/KycDetails";
 import BankDetails from "./components/section-components/BankDetails";
 import PropertyDetails from "./components/section-components/PropertyDetails";
 import OwnerDetails from "./components/section-components/OwnerDetails";
 import PrivateRoute from "./components/PrivateRoute";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 
 function Routing() {
     const isMdOrLarger = () => window.innerWidth >= 768;

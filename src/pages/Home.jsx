@@ -1,6 +1,6 @@
 import React from "react";
-import Sidebar from "../global-components/Sidebar";
-import Navbar from "../global-components/Navbar";
+import Sidebar from "../components/global-components/Sidebar";
+import Navbar from "../components/global-components/Navbar";
 import { useNavigate } from "react-router-dom";
 
 function Home({ isExpanded, setIsExpanded }) {

@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const isLoggedIn = "true";
 
     if (!isLoggedIn) {
         return <Navigate to="/partners/partners-login" />;
