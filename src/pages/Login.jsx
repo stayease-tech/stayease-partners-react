@@ -258,41 +258,23 @@ function Login() {
                 ))}
             </div>
 
-            {/* Navigation Bar */}
-            <motion.nav 
-                className={'shadow-2xl fixed w-full top-0 z-100'}
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ 
-                    y: isScrolledUp ? 0 : -100, 
-                    opacity: isScrolledUp ? 1 : 0 
-                }}
-                transition={{ 
-                    type: "spring", 
-                    damping: 20, 
-                    stiffness: 100 
-                }}
+            {/* Main Logo */}
+            <motion.div 
+                className="flex w-full items-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", damping: 20, stiffness: 400 }}
             >
-                <div className="max-w-7xl mx-auto px-4 mx-auto sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16 sm:h-20 items-center">
-                        <motion.div 
-                            className="flex items-center"
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ type: "spring", damping: 20, stiffness: 400 }}
-                        >
-                            <img 
-                                alt="StayEase Logo" 
-                                src="/Logo.webp"
-                                className="h-12 sm:h-16 w-auto object-cover"
-                                loading="lazy" 
-                            />
-                        </motion.div>
-                    </div>
-                </div>
-            </motion.nav>
+                <img 
+                    alt="StayEase Logo" 
+                    src="/Logo.webp"
+                    className="w-1/4 object-cover mx-auto mt-8 sm:mt-12"
+                    loading="lazy" 
+                />
+            </motion.div>
 
             {/* Main Content */}
             <motion.div 
-                className="relative z-10 min-h-screen flex items-center justify-center px-4 py-20"
+                className="z-10 flex items-center justify-center px-4"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
