@@ -39,12 +39,12 @@ export default function Navbar({ isExpanded, toggleSidebar }) {
     return (
         <nav className={`
             bg-gradient-to-r from-black via-gray-900 to-black
-            border-b-2 border-[#eba312] text-white shadow-2xl
+            border-b-2 border-[#eba312]/50 text-white shadow-2xl
             fixed w-full top-0 z-30 transition-all duration-300 backdrop-blur-md
             ${isExpanded ? 'md:pl-64' : 'md:pl-16'}
         `}>
             {/* Main navbar content */}
-            <div className="mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto  sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
                     
                     {/* Left section - Mobile menu + Logo + Breadcrumb */}
@@ -57,7 +57,7 @@ export default function Navbar({ isExpanded, toggleSidebar }) {
                             <Menu size={20} className="group-hover:scale-110 transition-transform" />
                         </button>
 
-                        <img src="/Logo.webp" alt="Logo" className="w-1/2 md:w-1/6" />
+                        <img src="/Logo.webp" alt="Logo" className="w-1/2 md:w-1/5" />
                     </div>
 
                     {/* Center section - Search (hidden on small screens) */}
