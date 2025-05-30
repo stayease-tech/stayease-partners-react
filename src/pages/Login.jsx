@@ -260,7 +260,7 @@ function Login() {
 
             {/* Navigation Bar */}
             <motion.nav 
-                className={`bg-black/80 backdrop-blur-md border-b border-yellow-500/20 text-white shadow-2xl fixed w-full top-0 z-[100]`}
+                className={'shadow-2xl fixed w-full top-0 z-100'}
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ 
                     y: isScrolledUp ? 0 : -100, 
@@ -272,7 +272,7 @@ function Login() {
                     stiffness: 100 
                 }}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-4 mx-auto sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16 sm:h-20 items-center">
                         <motion.div 
                             className="flex items-center"
@@ -281,7 +281,7 @@ function Login() {
                         >
                             <img 
                                 alt="StayEase Logo" 
-                                src={publicUrl + "static/img/brand_logo/stayEase-Logo.webp"} 
+                                src="/Logo.webp"
                                 className="h-12 sm:h-16 w-auto object-cover"
                                 loading="lazy" 
                             />
