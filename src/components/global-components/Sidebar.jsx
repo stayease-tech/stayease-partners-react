@@ -88,12 +88,6 @@ export default function Sidebar({ toggleSidebar, isExpanded }) {
             link: "/partners/partners-owner-details",
             description: "Personal information"
         },
-        { 
-            name: "Settings", 
-            icon: <Settings size={20} />, 
-            link: "/partners/partners-settings",
-            description: "App preferences"
-        },
     ];
 
     const MenuItem = ({ item, index }) => {
@@ -135,11 +129,11 @@ export default function Sidebar({ toggleSidebar, isExpanded }) {
                             <span className="font-medium text-sm block truncate">
                                 {item.name}
                             </span>
-                            {!isActive && (
-                                <span className="text-xs text-gray-400 block truncate opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {/* {!isActive && (
+                                <span className="text-xs text-gray-400 block truncate hidden group-hover:block transition-opacity duration-300">
                                     {item.description}
                                 </span>
-                            )}
+                            )} */}
                         </div>
                     )}
                 </Link>
@@ -149,11 +143,6 @@ export default function Sidebar({ toggleSidebar, isExpanded }) {
                     <div className="absolute left-16 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl z-50 whitespace-nowrap border border-gray-700">
                         <div className="flex items-center space-x-2">
                             <span className="font-medium text-sm">{item.name}</span>
-                            {item.badge && (
-                                <span className="bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                                    {item.badge}
-                                </span>
-                            )}
                         </div>
                         <div className="text-xs text-gray-400">{item.description}</div>
                         {/* Arrow */}
@@ -233,6 +222,45 @@ export default function Sidebar({ toggleSidebar, isExpanded }) {
                             ))}
                         </ul>
                     </nav>
+                </div>
+
+                <div className="absolute bottom-4 left-3 right-3">
+                    <ul className="space-y-2">
+                        <li>
+                            <a
+                                href="#"
+                                className="flex items-center space-x-3 px-3 py-3 rounded-xl 
+                                    transition-all duration-200 group relative overflow-hidden
+                                    hover:bg-[#eba312]/10 hover:text-[#eba312] text-gray-300"
+                            >
+                                {/* Icon */}
+                                <span className="text-xl transition-transform duration-200 group-hover:scale-110">
+                                    <Settings />
+                                </span>
+                                
+                                {/* Text */}
+                                {isExpanded && (
+                                    <span className="text-sm font-medium transition-all duration-200">
+                                        Settings
+                                    </span>
+                                )}
+
+                                {/* Tooltip for collapsed state */}
+                                {!isExpanded && (
+                                    <div className="
+                                        absolute left-full ml-2 px-3 py-2 bg-[#eba312] text-black text-sm 
+                                        rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 
+                                        transition-opacity duration-200 whitespace-nowrap z-50
+                                        shadow-lg
+                                    ">
+                                        Settings
+                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 
+                                            border-4 border-transparent border-r-[#eba312]" />
+                                    </div>
+                                )}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
                 {/* Decorative gradient overlay */}

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Login from "./components/Login";
 import Properties from "./components/section-components/Properties";
 import KycDetails from "./components/section-components/KycDetails";
 import BankDetails from "./components/section-components/BankDetails";
@@ -8,6 +7,7 @@ import OwnerDetails from "./components/section-components/OwnerDetails";
 import PrivateRoute from "./components/PrivateRoute";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 function Routing() {
     const isMdOrLarger = () => window.innerWidth >= 768;
