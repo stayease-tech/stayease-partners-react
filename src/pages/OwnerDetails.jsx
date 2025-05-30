@@ -1,6 +1,5 @@
-import React from 'react';
-import Sidebar from "../global-components/Sidebar";
-import Navbar from "../global-components/Navbar";
+import Sidebar from "../components/global-components/Sidebar";
+import Navbar from "../components/global-components/Navbar";
 
 function OwnerDetails({ isExpanded, setIsExpanded }) {
     return (

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import KycDetails from "./components/section-components/KycDetails";
-import BankDetails from "./components/section-components/BankDetails";
-import OwnerDetails from "./components/section-components/OwnerDetails";
 import PrivateRoute from "./components/PrivateRoute";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Properties from "./pages/Properties";
 import PropertyDetails from "./pages/PropertyDetails";
+import KycDetails from "./pages/KycDetails";
+import BankDetails from "./pages/BankDetails";
+import OwnerDetails from "./pages/OwnerDetails";
 
 function Routing() {
     const isMdOrLarger = () => window.innerWidth >= 768;
