@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Sidebar from "../global-components/Sidebar";
-import Navbar from "../global-components/Navbar";
+import { useState } from 'react';
+import Sidebar from "../components/global-components/Sidebar";
+import Navbar from "../components/global-components/Navbar";
 
 function PropertyDetails({ isExpanded, setIsExpanded }) {
     const [currentStep, setCurrentStep] = useState('propertyData');
