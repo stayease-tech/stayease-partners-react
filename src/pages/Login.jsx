@@ -1,8 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
 import { motion, AnimatePresence } from 'framer-motion';
+import { 
+    User, 
+    BarChart3, 
+    Package,
+    Shield
+} from 'lucide-react';
 
 function Login() {
     const [isSendingOtp, setIsSendingOtp] = useState(false);
@@ -17,40 +21,23 @@ function Login() {
 
     const loginHandleChange = (e) => {
         const { name, value } = e.target;
-
         setLoginData((prevState) => ({
             ...prevState,
             [name]: value
         }));
     }
 
-    const getCSRFToken = () => {
-        return Cookies.get('csrftoken');
-    }
-
-    axios.defaults.headers.common['X-CSRFToken'] = getCSRFToken()
-
     const handleSendOTP = async () => {
         setIsSendingOtp(true)
-
         try {
             const response = {
                 data: {
                     message: "OTP sent successfully!"
                 }
             }
-
             if (response.data.message === "OTP sent successfully!") {
                 alert(response.data.message);
                 setOtpSent(true);
-            } else if (response.data.message === "Phone number required!") {
-                alert(response.data.message);
-            }
-            else if (response.data.message === "Phone Number not registered!") {
-                alert(response.data.message);
-            }
-            else {
-                alert("Failed to send OTP");
             }
         } catch (error) {
             console.error("Error sending OTP:", error);
@@ -62,42 +49,39 @@ function Login() {
 
     const verifyOtp = async () => {
         setIsSubmitting(true);
-
         try {
-            const formData = new FormData();
-            formData.append("phone", loginData.ownerPhone);
-            formData.append("otp", loginData.otp);
-
-            const response = await axios.post("verify-otp/", formData);
-
-            if (response.data.message === "Login successful!") {
-                alert(response.data.message);
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("phone", loginData.ownerPhone);
-                navigate('/partners/partners-home')
-            }
-            if (response.data.message === "Phone number required!") {
-                alert(response.data.message);
-            }
-            if (response.data.message === "Phone Number not registered!") {
-                alert(response.data.message);
-            }
-            if (response.data.message === "OTP is required!") {
-                alert(response.data.message);
-            }
-            if (response.data.message === "Invalid OTP!") {
-                alert(response.data.message);
-            }
+            alert("Login successful!");
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("phone", loginData.ownerPhone);
+            navigate('/partners/partners-home')
         } catch (error) {
-            if (error.response) {
-                alert(error.response.data.error);
-            } else {
-                alert("Network or server error: " + error.message);
-            }
+            alert("Network or server error: " + error.message);
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    // Why Choose Us Data
+    const whyChooseUsData = [
+        {
+            id: 1,
+            title: "Industry Expertise",
+            description: "Experienced professionals with proven track record in co-living and homestay management.",
+            icon: <User className="w-5 h-5" />,
+        },
+        {
+            id: 2,
+            title: "Data & Tech Integration", 
+            description: "Targeted advertising and data-driven platforms to reach ideal audiences.",
+            icon: <BarChart3 className="w-5 h-5" />,
+        },
+        {
+            id: 3,
+            title: "Enhanced Returns",
+            description: "Data analytics to optimize rental rates and maximize revenue potential.",
+            icon: <Package className="w-5 h-5" />,
+        }
+    ];
 
     // Animation variants
     const containerVariants = {
@@ -105,7 +89,7 @@ function Login() {
         visible: {
             opacity: 1,
             transition: {
-                delayChildren: 0.3,
+                delayChildren: 0.2,
                 staggerChildren: 0.1
             }
         }
@@ -126,24 +110,21 @@ function Login() {
 
     const cardVariants = {
         hidden: { 
-            scale: 0.8, 
-            opacity: 0,
-            rotateY: -15
+            scale: 0.95, 
+            opacity: 0
         },
         visible: {
             scale: 1,
             opacity: 1,
-            rotateY: 0,
             transition: {
                 type: "spring",
                 damping: 20,
                 stiffness: 100,
-                duration: 0.6
+                duration: 0.5
             }
         },
         hover: {
             scale: 1.02,
-            rotateY: 2,
             transition: {
                 type: "spring",
                 damping: 30,
@@ -167,8 +148,8 @@ function Login() {
 
     const floatingVariants = {
         animate: {
-            y: [-20, 20, -20],
-            x: [-10, 10, -10],
+            y: [-10, 10, -10],
+            x: [-5, 5, -5],
             transition: {
                 duration: 6,
                 repeat: Infinity,
@@ -179,8 +160,8 @@ function Login() {
 
     const pulseVariants = {
         animate: {
-            scale: [1, 1.1, 1],
-            opacity: [0.3, 0.6, 0.3],
+            scale: [1, 1.05, 1],
+            opacity: [0.3, 0.5, 0.3],
             transition: {
                 duration: 4,
                 repeat: Infinity,
@@ -190,15 +171,15 @@ function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
-            {/* Background Image 2 - Blurred */}
+        <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden flex flex-col">
+            {/* Background Image - Blurred */}
             <div className="absolute inset-0 z-0">
                 <div 
                     className="w-full h-full bg-cover bg-center bg-no-repeat"
                     style={{
                         backgroundImage: `url('/image1.jpeg')`,
                         filter: 'blur(1.5px) brightness(0.3)',
-                        transform: 'scale(1)' // Prevents blur edge artifacts
+                        transform: 'scale(1)'
                     }}
                 />
                 <div className="absolute inset-0 bg-black/40" />
@@ -207,27 +188,21 @@ function Login() {
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden z-10">
                 <motion.div 
-                    className="absolute -top-40 -right-40 w-60 sm:w-80 h-60 sm:h-80 bg-gradient-to-br from-yellow-500/20 to-amber-600/20 rounded-full blur-3xl"
+                    className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-yellow-500/20 to-amber-600/20 rounded-full blur-3xl"
                     variants={pulseVariants}
                     animate="animate"
                 />
                 <motion.div 
-                    className="absolute -bottom-40 -left-40 w-60 sm:w-80 h-60 sm:h-80 bg-gradient-to-br from-yellow-600/20 to-orange-500/20 rounded-full blur-3xl"
+                    className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-br from-yellow-600/20 to-orange-500/20 rounded-full blur-3xl"
                     variants={pulseVariants}
                     animate="animate"
                     style={{ animationDelay: '1s' }}
-                />
-                <motion.div 
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 bg-gradient-to-br from-amber-500/10 to-yellow-500/10 rounded-full blur-3xl"
-                    variants={pulseVariants}
-                    animate="animate"
-                    style={{ animationDelay: '0.5s' }}
                 />
             </div>
 
             {/* Floating Particles */}
             <div className="absolute inset-0 z-10">
-                {[...Array(15)].map((_, i) => (
+                {[...Array(8)].map((_, i) => (
                     <motion.div 
                         key={i}
                         className="absolute w-1 h-1 bg-yellow-400/30 rounded-full"
@@ -245,35 +220,37 @@ function Login() {
                 ))}
             </div>
 
-            {/* Main Logo */}
+            {/* Header with Logo */}
             <motion.div 
-                className="flex w-full items-center relative z-20"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", damping: 20, stiffness: 400 }}
+                className="relative z-20 flex justify-center pt-4 pb-2"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
             >
                 <img 
                     alt="StayEase Logo" 
                     src="/Logo.webp"
-                    className="w-1/4 object-cover mx-auto mt-8 sm:mt-12"
+                    className="h-12 lg:h-16 object-contain"
                     loading="lazy" 
                 />
             </motion.div>
 
             {/* Main Content Container */}
-            <div className="relative z-20 flex items-center justify-center px-4 min-h-[calc(100vh-200px)]">
+            <div className="relative z-20 flex-1 flex items-center justify-center px-4 lg:px-8">
                 <div className="w-full max-w-7xl mx-auto">
-                    <div className="flex justify-center items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center h-full">
                         
                         {/* Left Side - Login Form */}
                         <motion.div 
                             variants={containerVariants}
                             initial="hidden"
                             animate="visible"
+                            className="flex justify-center lg:justify-end"
                         >
-                            <div className="w-full max-w-md mx-auto lg:mx-0">
+                            <div className="w-full max-w-md">
                                 {/* Login Card */}
                                 <motion.div 
-                                    className="bg-gray-900/90 backdrop-blur-xl border border-yellow-500/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl"
+                                    className="bg-gray-900/90 backdrop-blur-xl border border-yellow-500/20 rounded-2xl p-6 shadow-2xl"
                                     variants={cardVariants}
                                     initial="hidden"
                                     animate="visible"
@@ -281,11 +258,11 @@ function Login() {
                                 >
                                     {/* Header */}
                                     <motion.div 
-                                        className="text-center mb-6 sm:mb-8"
+                                        className="text-center mb-6"
                                         variants={itemVariants}
                                     >
                                         <motion.div 
-                                            className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 shadow-lg"
+                                            className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl mb-3 shadow-lg"
                                             whileHover={{ 
                                                 rotate: 360,
                                                 scale: 1.1
@@ -296,19 +273,19 @@ function Login() {
                                                 stiffness: 200
                                             }}
                                         >
-                                            <svg className="w-6 h-6 sm:w-8 sm:h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                            <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                                             </svg>
                                         </motion.div>
-                                        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+                                        <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                                             Welcome Back!
                                         </h1>
-                                        <p className="text-gray-400 mt-2 text-sm sm:text-base">Sign in to access your partner dashboard</p>
+                                        <p className="text-gray-400 mt-2 text-sm">Sign in to access your partner dashboard</p>
                                     </motion.div>
 
                                     {/* Form Fields */}
                                     <motion.div 
-                                        className="space-y-4 sm:space-y-6"
+                                        className="space-y-4"
                                         variants={itemVariants}
                                     >
                                         {/* Phone Number Input */}
@@ -328,7 +305,7 @@ function Login() {
                                                 </motion.svg>
                                                 Phone Number
                                             </label>
-                                            <div className="flex flex-col sm:flex-row gap-3">
+                                            <div className="flex gap-2">
                                                 <motion.div 
                                                     className="relative flex-1"
                                                     whileFocus={{ scale: 1.02 }}
@@ -339,7 +316,7 @@ function Login() {
                                                         id="ownerPhone"
                                                         value={loginData.ownerPhone}
                                                         onChange={loginHandleChange}
-                                                        className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none transition-all duration-300 text-sm sm:text-base"
+                                                        className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none transition-all duration-300 text-sm"
                                                         name="ownerPhone"
                                                         placeholder="Enter your phone number"
                                                         required
@@ -354,7 +331,7 @@ function Login() {
                                                                 exit={{ scale: 0, opacity: 0 }}
                                                                 transition={{ type: "spring", damping: 20 }}
                                                             >
-                                                                <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                                                <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                                                 </svg>
                                                             </motion.div>
@@ -365,7 +342,7 @@ function Login() {
                                                 <motion.button
                                                     onClick={handleSendOTP}
                                                     disabled={isSendingOtp || otpSent || !loginData.ownerPhone}
-                                                    className="px-4 sm:px-6 py-3 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-medium rounded-xl transition-all duration-300 shadow-lg disabled:shadow-none whitespace-nowrap text-sm sm:text-base"
+                                                    className="px-4 py-2.5 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-medium rounded-lg transition-all duration-300 shadow-lg disabled:shadow-none whitespace-nowrap text-sm"
                                                     variants={buttonVariants}
                                                     initial="idle"
                                                     whileHover={!isSendingOtp && !otpSent && loginData.ownerPhone ? "hover" : "idle"}
@@ -394,8 +371,7 @@ function Login() {
                                                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                                 </motion.svg>
-                                                                <span className="hidden sm:inline">Sending...</span>
-                                                                <span className="sm:hidden">...</span>
+                                                                <span>Sending...</span>
                                                             </motion.div>
                                                         ) : otpSent ? (
                                                             <motion.span
@@ -453,7 +429,7 @@ function Login() {
                                                         id="otp"
                                                         value={loginData.otp}
                                                         onChange={loginHandleChange}
-                                                        className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none transition-all duration-300 text-center text-lg tracking-widest"
+                                                        className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none transition-all duration-300 text-center text-lg tracking-widest"
                                                         name="otp"
                                                         placeholder="Enter 6-digit OTP"
                                                         maxLength="6"
@@ -471,7 +447,7 @@ function Login() {
                                         <motion.button
                                             onClick={verifyOtp}
                                             disabled={isSubmitting || !loginData.otp || !otpSent}
-                                            className="w-full py-3 sm:py-4 px-6 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 disabled:shadow-none relative overflow-hidden"
+                                            className="w-full py-3 px-6 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-black font-bold text-base rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 disabled:shadow-none relative overflow-hidden"
                                             variants={buttonVariants}
                                             initial="idle"
                                             whileHover={!isSubmitting && loginData.otp && otpSent ? "hover" : "idle"}
@@ -488,7 +464,7 @@ function Login() {
                                                         exit={{ opacity: 0 }}
                                                     >
                                                         <motion.svg 
-                                                            className="w-5 h-5 sm:w-6 sm:h-6 text-black" 
+                                                            className="w-5 h-5 text-black" 
                                                             fill="none" 
                                                             viewBox="0 0 24 24"
                                                             animate={{ rotate: 360 }}
@@ -545,61 +521,88 @@ function Login() {
                             </div>
                         </motion.div>
 
-                        {/* Right Side - Image 1 (Hidden on mobile) */}
-                        {/* <motion.div 
-                            className="order-1 lg:order-2 hidden lg:block"
-                            variants={imageVariants}
-                            initial="hidden"
-                            animate="visible"
-                        >
-                            <div className="relative">
+                        {/* Right Side - Why Choose Us Section (Desktop Only) */}
+                        <div className="hidden lg:flex justify-start">
+                            <motion.div
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.4, duration: 0.8 }}
+                                className="w-full max-w-lg"
+                            >
+                                {/* Section Header */}
                                 <motion.div 
-                                    className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-yellow-500/20 to-amber-600/20 backdrop-blur-sm border border-yellow-500/30"
-                                    whileHover={{ 
-                                        scale: 1.02,
-                                        rotateY: 5
-                                    }}
-                                    transition={{ 
-                                        type: "spring", 
-                                        damping: 20, 
-                                        stiffness: 100 
-                                    }}
+                                    className="mb-8"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.6, duration: 0.6 }}
                                 >
-                                    <img 
-                                        src="/image1.jpeg" 
-                                        alt="StayEase Property Interior"
-                                        className="w-full h-auto object-cover"
-                                        loading="lazy"
-                                    />
+                                    <div className="flex items-center mb-4">
+                                        <div>
+                                            <h2 className="text-2xl font-bold">
+                                                <span className="text-white">WHY </span>
+                                                <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                                                    CHOOSE US?
+                                                </span>
+                                            </h2>
+                                            <div className="w-12 h-0.5 bg-gradient-to-r from-yellow-400 to-amber-500 mt-2 rounded-full"></div>
+                                        </div>
+                                    </div>
                                 </motion.div>
 
-                                <motion.div 
-                                    className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-400/30 rounded-full blur-sm"
-                                    animate={{ 
-                                        scale: [1, 1.2, 1],
-                                        opacity: [0.3, 0.6, 0.3]
-                                    }}
-                                    transition={{ 
-                                        duration: 3, 
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                    }}
-                                />
-                                <motion.div 
-                                    className="absolute -bottom-2 -left-2 w-6 h-6 bg-amber-400/30 rounded-full blur-sm"
-                                    animate={{ 
-                                        scale: [1, 1.3, 1],
-                                        opacity: [0.2, 0.5, 0.2]
-                                    }}
-                                    transition={{ 
-                                        duration: 4, 
-                                        repeat: Infinity,
-                                        ease: "easeInOut",
-                                        delay: 1
-                                    }}
-                                />
-                            </div>
-                        </motion.div> */}
+                                {/* Feature Cards - Compact Version */}
+                                <div className="space-y-4">
+                                    {whyChooseUsData.map((feature, index) => (
+                                        <motion.div
+                                            key={feature.id}
+                                            initial={{ opacity: 0, x: 30 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.8 + (index * 0.1), duration: 0.5 }}
+                                            whileHover={{ scale: 1.02, x: 5 }}
+                                            className="group cursor-pointer"
+                                        >
+                                            <div className="bg-gray-900/30 backdrop-blur-sm border border-gray-700/20 rounded-xl p-5 relative overflow-hidden transition-all duration-300 hover:border-yellow-500/30 hover:bg-gray-900/50">
+                                                {/* Background Gradient */}
+                                                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/5 to-amber-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                                
+                                                {/* Content */}
+                                                <div className="relative z-10 flex items-center space-x-4">
+                                                    {/* Icon Circle */}
+                                                    <motion.div 
+                                                        className="flex-shrink-0"
+                                                        whileHover={{ rotate: 15 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    >
+                                                        <div className="w-12 h-12 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-full flex items-center justify-center border border-gray-700/30 group-hover:border-yellow-500/30 transition-all duration-300">
+                                                            <div className="text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300">
+                                                                {feature.icon}
+                                                            </div>
+                                                        </div>
+                                                    </motion.div>
+
+                                                    {/* Text Content */}
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center mb-2">
+                                                            <span className="text-yellow-400 font-bold text-sm mr-2">
+                                                                {feature.id}.
+                                                            </span>
+                                                            <h3 className="text-lg font-bold text-white group-hover:text-yellow-100 transition-colors duration-300">
+                                                                {feature.title}
+                                                            </h3>
+                                                        </div>
+                                                        <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                                                            {feature.description}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Decorative Element */}
+                                                <div className="absolute top-3 right-3 w-1.5 h-1.5 bg-yellow-400/30 rounded-full group-hover:bg-yellow-400/60 transition-colors duration-300"></div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        </div>
                     </div>
                 </div>
             </div>
