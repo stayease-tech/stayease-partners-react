@@ -6,6 +6,7 @@ export const ROUTES = {
     HOME: "/partners/partners-home",
     PROPERTIES: "/partners/partners-properties",
     PROPERTY_DETAILS: "/partners/partners-property-details",
+    EXPENSES: "/partners/partners-expenses",
     
     // Profile routes
     KYC_DETAILS: "/partners/partners-kyc-details",
@@ -29,4 +30,9 @@ export const ROUTE_CONFIG = {
         description: "Manage your properties",
         isPrivate: true
     },
+    [ROUTES.EXPENSES]: {
+        title: "Expenses",
+        description: "Track and manage expenses",
+        isPrivate: true
+    }
 };

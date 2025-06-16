@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Properties from "../pages/Properties";
 import PropertyDetails from "../pages/PropertyDetails";
+import Expenses from "../pages/Expenses";
 import KycDetails from "../pages/KycDetails";
 import BankDetails from "../pages/BankDetails";
 import OwnerDetails from "../pages/OwnerDetails";
@@ -49,6 +50,15 @@ function Routing() {
                 element={
                     <PrivateRoute>
                         <PropertyDetails />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path={ROUTES.EXPENSES}
+                element={
+                    <PrivateRoute>
+                        <Expenses />
                     </PrivateRoute>
                 }
             />
