@@ -1,9 +1,74 @@
 import { useNavigate } from "react-router-dom";
-import { Building2, Shield, Landmark, User, TrendingUp, BarChart3 } from "lucide-react";
+import { 
+    Building2, 
+    Shield, 
+    Landmark, 
+    User, 
+    TrendingUp, 
+    BarChart3,
+    Receipt,
+    Eye,
+    FileText,
+    IndianRupee,
+    Clock,
+    CheckCircle,
+    AlertCircle,
+    X,
+    ArrowRight,
+    Calendar
+} from "lucide-react";
 import MainLayout from "../components/layout/MainLayout";
 
 function Home() {
     const navigate = useNavigate();
+
+    // Mock recent expenses data (in real app, this would come from API)
+    const recentExpenses = [
+        {
+            id: 1,
+            propertyName: "Stayease Harmonia",
+            category: "BGV Charges",
+            amount: 1000,
+            status: "Pending",
+            priority: "P1",
+            deadline: "4 Hours",
+            receipt: "https://local-machine-bucket.s3.amazonaws.com/documents/accounts-receipts/2025/06/11/Stayease_Harmonia_Vendor_list_-_Sheet1.pdf",
+            createdAt: "2025-06-11T12:04:36.110Z"
+        },
+        {
+            id: 4,
+            propertyName: "Stayease Aura",
+            category: "Repairs",
+            amount: 5000,
+            status: "In Progress",
+            priority: "P1",
+            deadline: "2 Hours",
+            receipt: "https://local-machine-bucket.s3.amazonaws.com/documents/accounts-receipts/2025/06/11/repair_invoice.pdf",
+            createdAt: "2025-06-11T10:30:15.000Z"
+        },
+        {
+            id: 5,
+            propertyName: "Stayease Aura",
+            category: "Electricity",
+            amount: 8500,
+            status: "Approved",
+            priority: "P2",
+            deadline: "24 Hours",
+            receipt: "https://local-machine-bucket.s3.amazonaws.com/documents/accounts-receipts/2025/06/11/electricity_bill.pdf",
+            createdAt: "2025-06-10T09:15:20.000Z"
+        },
+        {
+            id: 2,
+            propertyName: "Stayease Harmonia",
+            category: "Field Staff",
+            amount: 3000,
+            status: "Pending",
+            priority: "P3",
+            deadline: "12 Hours",
+            receipt: "https://local-machine-bucket.s3.amazonaws.com/documents/accounts-receipts/2025/06/11/Stayease_Harmonia_Vendor_list_-_Sheet1_nX0Esgx.pdf",
+            createdAt: "2025-06-11T12:04:36.110Z"
+        }
+    ];
 
     const dashboardCards = [
         {
@@ -16,6 +81,17 @@ function Home() {
             bgColor: "bg-gradient-to-br from-[#eba312]/10 to-[#d4941a]/10",
             borderColor: "border-[#eba312]/30",
             textColor: "text-[#eba312]"
+        },
+        {
+            title: "Recent Expenses",
+            value: "₹17,500",
+            icon: <Receipt size={24} />,
+            path: "/partners/partners-expenses",
+            description: "This month's total",
+            color: "from-blue-500 to-blue-600",
+            bgColor: "bg-gradient-to-br from-blue-500/10 to-blue-600/10",
+            borderColor: "border-blue-500/30",
+            textColor: "text-blue-500"
         },
         {
             title: "KYC Details",
@@ -34,17 +110,6 @@ function Home() {
             icon: <Landmark size={24} />,
             path: "/partners/partners-bank-details",
             description: "Payment setup",
-            color: "from-blue-500 to-blue-600",
-            bgColor: "bg-gradient-to-br from-blue-500/10 to-blue-600/10",
-            borderColor: "border-blue-500/30",
-            textColor: "text-blue-500"
-        },
-        {
-            title: "Profile",
-            value: "Complete",
-            icon: <User size={24} />,
-            path: "/partners/partners-owner-details",
-            description: "Account information",
             color: "from-purple-500 to-purple-600",
             bgColor: "bg-gradient-to-br from-purple-500/10 to-purple-600/10",
             borderColor: "border-purple-500/30",
@@ -68,6 +133,66 @@ function Home() {
             positive: true
         }
     ];
+
+    // Format currency
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            minimumFractionDigits: 0
+        }).format(amount);
+    };
+
+    // Format date for recent expenses
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) return "Today";
+        if (diffDays === 2) return "Yesterday";
+        if (diffDays <= 7) return `${diffDays - 1} days ago`;
+        
+        return date.toLocaleDateString('en-IN', {
+            month: 'short',
+            day: 'numeric'
+        });
+    };
+
+    // Get status display
+    const getStatusDisplay = (status) => {
+        const statusConfig = {
+            'Pending': { 
+                color: 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30', 
+                icon: <Clock size={12} /> 
+            },
+            'Approved': { 
+                color: 'text-green-400 bg-green-500/20 border-green-500/30', 
+                icon: <CheckCircle size={12} /> 
+            },
+            'In Progress': { 
+                color: 'text-blue-400 bg-blue-500/20 border-blue-500/30', 
+                icon: <AlertCircle size={12} /> 
+            },
+            'Rejected': { 
+                color: 'text-red-400 bg-red-500/20 border-red-500/30', 
+                icon: <X size={12} /> 
+            }
+        };
+        
+        return statusConfig[status] || statusConfig['Pending'];
+    };
+
+    // Get priority color
+    const getPriorityColor = (priority) => {
+        const priorityColors = {
+            'P1': 'text-red-400 bg-red-500/20 border-red-500/30',
+            'P2': 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30',
+            'P3': 'text-green-400 bg-green-500/20 border-green-500/30'
+        };
+        return priorityColors[priority] || priorityColors['P3'];
+    };
 
     return (
         <MainLayout 
@@ -119,7 +244,7 @@ function Home() {
             </div>
 
             {/* Main Dashboard Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
                 {dashboardCards.map((card, index) => (
                     <div 
                         key={index}
@@ -175,14 +300,104 @@ function Home() {
                 ))}
             </div>
 
+            {/* Recent Expenses Section */}
+            <div className="mb-12">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-white flex items-center">
+                        <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
+                        Recent Expenses
+                    </h2>
+                    <button 
+                        onClick={() => navigate("/partners/partners-expenses")}
+                        className="flex items-center space-x-2 text-[#eba312] hover:text-[#d4941a] transition-colors duration-300 group"
+                    >
+                        <span className="text-sm font-medium">View All</span>
+                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+                    </button>
+                </div>
+
+                <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl overflow-hidden">
+                    {recentExpenses.length > 0 ? (
+                        <div className="divide-y divide-gray-700/30">
+                            {recentExpenses.slice(0, 4).map((expense) => {
+                                const statusDisplay = getStatusDisplay(expense.status);
+                                return (
+                                    <div 
+                                        key={expense.id}
+                                        className="p-4 hover:bg-gray-800/30 transition-colors duration-200 cursor-pointer group"
+                                        onClick={() => navigate("/partners/partners-expenses")}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-4 flex-1">
+                                                {/* Property & Category */}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center space-x-2 mb-1">
+                                                        <Building2 size={14} className="text-[#eba312] flex-shrink-0" />
+                                                        <span className="font-medium text-white truncate">{expense.propertyName}</span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-400 truncate">{expense.category}</p>
+                                                </div>
+
+                                                {/* Amount */}
+                                                <div className="text-right">
+                                                    <p className="font-bold text-[#eba312]">{formatCurrency(expense.amount)}</p>
+                                                    <p className="text-xs text-gray-500">{formatDate(expense.createdAt)}</p>
+                                                </div>
+                                            </div>
+
+                                            {/* Status & Actions */}
+                                            <div className="flex items-center space-x-3 ml-4">
+                                                {/* Priority */}
+                                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(expense.priority)}`}>
+                                                    {expense.priority}
+                                                </span>
+
+                                                {/* Status */}
+                                                <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${statusDisplay.color}`}>
+                                                    {statusDisplay.icon}
+                                                    <span>{expense.status}</span>
+                                                </span>
+
+                                                {/* Receipt indicator */}
+                                                {expense.receipt && (
+                                                    <div className="p-1.5 bg-[#eba312]/20 rounded-lg">
+                                                        <FileText size={14} className="text-[#eba312]" />
+                                                    </div>
+                                                )}
+
+                                                {/* View arrow */}
+                                                <ArrowRight size={16} className="text-gray-400 group-hover:text-[#eba312] group-hover:translate-x-1 transition-all duration-300" />
+                                            </div>
+                                        </div>
+
+                                        {/* Deadline if urgent */}
+                                        {expense.priority === 'P1' && (
+                                            <div className="mt-2 flex items-center space-x-1 text-xs text-red-400">
+                                                <Clock size={12} />
+                                                <span>Deadline: {expense.deadline}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="p-8 text-center">
+                            <Receipt size={32} className="text-gray-500 mx-auto mb-3" />
+                            <p className="text-gray-400">No recent expenses</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
             {/* Quick Actions Section */}
-            <div className="mt-12">
+            <div>
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center">
                     <div className="w-1 h-6 bg-gradient-to-b from-[#eba312] to-[#d4941a] rounded-full mr-3"></div>
                     Quick Actions
                 </h2>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <button 
                         onClick={() => navigate("/partners/partners-properties")}
                         className="group p-4 bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-lg hover:border-[#eba312]/30 transition-all duration-300 text-left"
@@ -192,8 +407,23 @@ function Home() {
                                 <Building2 size={16} className="text-[#eba312]" />
                             </div>
                             <div>
-                                <p className="text-white font-medium">View All Properties</p>
-                                <p className="text-gray-400 text-sm">Manage your listings</p>
+                                <p className="text-white font-medium">View Properties</p>
+                                <p className="text-gray-400 text-sm">Manage listings</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button 
+                        onClick={() => navigate("/partners/partners-expenses")}
+                        className="group p-4 bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-lg hover:border-blue-500/30 transition-all duration-300 text-left"
+                    >
+                        <div className="flex items-center space-x-3">
+                            <div className="p-2 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors duration-300">
+                                <Receipt size={16} className="text-blue-500" />
+                            </div>
+                            <div>
+                                <p className="text-white font-medium">Add Expense</p>
+                                <p className="text-gray-400 text-sm">Track new expense</p>
                             </div>
                         </div>
                     </button>
@@ -215,11 +445,11 @@ function Home() {
 
                     <button 
                         onClick={() => navigate("/partners/partners-bank-details")}
-                        className="group p-4 bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-lg hover:border-blue-500/30 transition-all duration-300 text-left"
+                        className="group p-4 bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-lg hover:border-purple-500/30 transition-all duration-300 text-left"
                     >
                         <div className="flex items-center space-x-3">
-                            <div className="p-2 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors duration-300">
-                                <Landmark size={16} className="text-blue-500" />
+                            <div className="p-2 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors duration-300">
+                                <Landmark size={16} className="text-purple-500" />
                             </div>
                             <div>
                                 <p className="text-white font-medium">Payment Settings</p>
