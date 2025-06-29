@@ -199,18 +199,6 @@ function Home() {
             title="Welcome Back, Jibin!"
             description="Here's an overview of your property management dashboard"
         >
-            {/* Date Display */}
-            <div className="flex justify-end mb-8">
-                <div className="text-sm text-gray-400">
-                    {new Date().toLocaleDateString('en-US', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                    })}
-                </div>
-            </div>
-
             {/* Quick Stats Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                 {statsCards.map((stat, index) => (
@@ -300,7 +288,7 @@ function Home() {
                 ))}
             </div>
 
-            {/* Recent Expenses Section */}
+            {/* Recent Expenses Section - FIXED FOR MOBILE */}
             <div className="mb-12">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-white flex items-center">
@@ -327,56 +315,115 @@ function Home() {
                                         className="p-4 hover:bg-gray-800/30 transition-colors duration-200 cursor-pointer group"
                                         onClick={() => navigate("/partners/partners-expenses")}
                                     >
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-4 flex-1">
-                                                {/* Property & Category */}
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center space-x-2 mb-1">
-                                                        <Building2 size={14} className="text-[#eba312] flex-shrink-0" />
-                                                        <span className="font-medium text-white truncate">{expense.propertyName}</span>
-                                                    </div>
-                                                    <p className="text-sm text-gray-400 truncate">{expense.category}</p>
+                                        {/* Mobile Layout (< md) */}
+                                        <div className="md:hidden">
+                                            {/* Row 1: Property name and amount */}
+                                            <div className="flex items-start justify-between mb-2">
+                                                <div className="flex items-center space-x-2 flex-1 min-w-0 mr-3">
+                                                    <Building2 size={14} className="text-[#eba312] flex-shrink-0" />
+                                                    <span className="font-medium text-white truncate text-sm">{expense.propertyName}</span>
                                                 </div>
-
-                                                {/* Amount */}
-                                                <div className="text-right">
-                                                    <p className="font-bold text-[#eba312]">{formatCurrency(expense.amount)}</p>
-                                                    <p className="text-xs text-gray-500">{formatDate(expense.createdAt)}</p>
+                                                <div className="text-right flex-shrink-0">
+                                                    <p className="font-bold text-[#eba312] text-sm">{formatCurrency(expense.amount)}</p>
                                                 </div>
                                             </div>
 
-                                            {/* Status & Actions */}
-                                            <div className="flex items-center space-x-3 ml-4">
-                                                {/* Priority */}
-                                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(expense.priority)}`}>
-                                                    {expense.priority}
-                                                </span>
-
-                                                {/* Status */}
-                                                <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${statusDisplay.color}`}>
-                                                    {statusDisplay.icon}
-                                                    <span>{expense.status}</span>
-                                                </span>
-
-                                                {/* Receipt indicator */}
-                                                {expense.receipt && (
-                                                    <div className="p-1.5 bg-[#eba312]/20 rounded-lg">
-                                                        <FileText size={14} className="text-[#eba312]" />
-                                                    </div>
-                                                )}
-
-                                                {/* View arrow */}
-                                                <ArrowRight size={16} className="text-gray-400 group-hover:text-[#eba312] group-hover:translate-x-1 transition-all duration-300" />
+                                            {/* Row 2: Category and date */}
+                                            <div className="flex items-center justify-between mb-3">
+                                                <p className="text-sm text-gray-400 truncate flex-1 min-w-0 mr-2">{expense.category}</p>
+                                                <p className="text-xs text-gray-500 flex-shrink-0">{formatDate(expense.createdAt)}</p>
                                             </div>
+
+                                            {/* Row 3: Status badges and receipt */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                                                    {/* Priority */}
+                                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getPriorityColor(expense.priority)}`}>
+                                                        {expense.priority}
+                                                    </span>
+
+                                                    {/* Status */}
+                                                    <span className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-xs font-medium border ${statusDisplay.color}`}>
+                                                        {statusDisplay.icon}
+                                                        <span className="hidden xs:inline">{expense.status}</span>
+                                                    </span>
+                                                </div>
+
+                                                <div className="flex items-center space-x-2 flex-shrink-0">
+                                                    {/* Receipt indicator */}
+                                                    {expense.receipt && (
+                                                        <div className="p-1 bg-[#eba312]/20 rounded">
+                                                            <FileText size={12} className="text-[#eba312]" />
+                                                        </div>
+                                                    )}
+
+                                                    {/* View arrow */}
+                                                    <ArrowRight size={14} className="text-gray-400 group-hover:text-[#eba312] group-hover:translate-x-1 transition-all duration-300" />
+                                                </div>
+                                            </div>
+
+                                            {/* Deadline if urgent */}
+                                            {expense.priority === 'P1' && (
+                                                <div className="mt-2 flex items-center space-x-1 text-xs text-red-400">
+                                                    <Clock size={10} />
+                                                    <span>Deadline: {expense.deadline}</span>
+                                                </div>
+                                            )}
                                         </div>
 
-                                        {/* Deadline if urgent */}
-                                        {expense.priority === 'P1' && (
-                                            <div className="mt-2 flex items-center space-x-1 text-xs text-red-400">
-                                                <Clock size={12} />
-                                                <span>Deadline: {expense.deadline}</span>
+                                        {/* Desktop Layout (≥ md) */}
+                                        <div className="hidden md:block">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center space-x-4 flex-1 min-w-0">
+                                                    {/* Property & Category */}
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center space-x-2 mb-1">
+                                                            <Building2 size={14} className="text-[#eba312] flex-shrink-0" />
+                                                            <span className="font-medium text-white truncate">{expense.propertyName}</span>
+                                                        </div>
+                                                        <p className="text-sm text-gray-400 truncate">{expense.category}</p>
+                                                    </div>
+
+                                                    {/* Amount */}
+                                                    <div className="text-right">
+                                                        <p className="font-bold text-[#eba312]">{formatCurrency(expense.amount)}</p>
+                                                        <p className="text-xs text-gray-500">{formatDate(expense.createdAt)}</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Status & Actions */}
+                                                <div className="flex items-center space-x-3 ml-4">
+                                                    {/* Priority */}
+                                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(expense.priority)}`}>
+                                                        {expense.priority}
+                                                    </span>
+
+                                                    {/* Status */}
+                                                    <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${statusDisplay.color}`}>
+                                                        {statusDisplay.icon}
+                                                        <span>{expense.status}</span>
+                                                    </span>
+
+                                                    {/* Receipt indicator */}
+                                                    {expense.receipt && (
+                                                        <div className="p-1.5 bg-[#eba312]/20 rounded-lg">
+                                                            <FileText size={14} className="text-[#eba312]" />
+                                                        </div>
+                                                    )}
+
+                                                    {/* View arrow */}
+                                                    <ArrowRight size={16} className="text-gray-400 group-hover:text-[#eba312] group-hover:translate-x-1 transition-all duration-300" />
+                                                </div>
                                             </div>
-                                        )}
+
+                                            {/* Deadline if urgent */}
+                                            {expense.priority === 'P1' && (
+                                                <div className="mt-2 flex items-center space-x-1 text-xs text-red-400">
+                                                    <Clock size={12} />
+                                                    <span>Deadline: {expense.deadline}</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 );
                             })}
@@ -406,9 +453,9 @@ function Home() {
                             <div className="p-2 bg-[#eba312]/20 rounded-lg group-hover:bg-[#eba312]/30 transition-colors duration-300">
                                 <Building2 size={16} className="text-[#eba312]" />
                             </div>
-                            <div>
-                                <p className="text-white font-medium">View Properties</p>
-                                <p className="text-gray-400 text-sm">Manage listings</p>
+                            <div className="min-w-0 flex-1">
+                                <p className="text-white font-medium truncate">View Properties</p>
+                                <p className="text-gray-400 text-sm truncate">Manage listings</p>
                             </div>
                         </div>
                     </button>
@@ -421,9 +468,9 @@ function Home() {
                             <div className="p-2 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors duration-300">
                                 <Receipt size={16} className="text-blue-500" />
                             </div>
-                            <div>
-                                <p className="text-white font-medium">Add Expense</p>
-                                <p className="text-gray-400 text-sm">Track new expense</p>
+                            <div className="min-w-0 flex-1">
+                                <p className="text-white font-medium truncate">Add Expense</p>
+                                <p className="text-gray-400 text-sm truncate">Track new expense</p>
                             </div>
                         </div>
                     </button>
@@ -436,9 +483,9 @@ function Home() {
                             <div className="p-2 bg-green-500/20 rounded-lg group-hover:bg-green-500/30 transition-colors duration-300">
                                 <Shield size={16} className="text-green-500" />
                             </div>
-                            <div>
-                                <p className="text-white font-medium">Update KYC</p>
-                                <p className="text-gray-400 text-sm">Verify documents</p>
+                            <div className="min-w-0 flex-1">
+                                <p className="text-white font-medium truncate">Update KYC</p>
+                                <p className="text-gray-400 text-sm truncate">Verify documents</p>
                             </div>
                         </div>
                     </button>
@@ -451,9 +498,9 @@ function Home() {
                             <div className="p-2 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors duration-300">
                                 <Landmark size={16} className="text-purple-500" />
                             </div>
-                            <div>
-                                <p className="text-white font-medium">Payment Settings</p>
-                                <p className="text-gray-400 text-sm">Manage bank details</p>
+                            <div className="min-w-0 flex-1">
+                                <p className="text-white font-medium truncate">Payment Settings</p>
+                                <p className="text-gray-400 text-sm truncate">Manage bank details</p>
                             </div>
                         </div>
                     </button>

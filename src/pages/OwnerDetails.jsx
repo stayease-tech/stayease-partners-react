@@ -2,6 +2,59 @@ import { useState } from 'react';
 import { User, Phone, Mail, MapPin, Calendar, Users, Edit3, Save, X } from "lucide-react";
 import MainLayout from '../components/layout/MainLayout';
 
+// Move ProfileField component outside to prevent recreation on each render
+const ProfileField = ({ icon, label, value, field, type = "text", editable = true, isEditing, onInputChange }) => (
+    <div className="group bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4 hover:border-[#eba312]/30 transition-all duration-300">
+        <div className="flex items-start space-x-3">
+            <div className="p-2 bg-[#eba312]/20 rounded-lg group-hover:bg-[#eba312]/30 transition-colors duration-300">
+                {icon}
+            </div>
+            <div className="flex-1 min-w-0">
+                <label className="text-sm font-medium text-[#eba312] block mb-2">
+                    {label}
+                </label>
+                {isEditing && editable ? (
+                    type === "select" ? (
+                        <select
+                            value={value}
+                            onChange={(e) => onInputChange(field, e.target.value)}
+                            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300"
+                        >
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    ) : type === "textarea" ? (
+                        <textarea
+                            value={value}
+                            onChange={(e) => onInputChange(field, e.target.value)}
+                            rows={2}
+                            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300 resize-none"
+                            placeholder={`Enter your ${label.toLowerCase()}`}
+                        />
+                    ) : (
+                        <input
+                            type={type}
+                            value={value}
+                            onChange={(e) => onInputChange(field, e.target.value)}
+                            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300"
+                            placeholder={`Enter your ${label.toLowerCase()}`}
+                        />
+                    )
+                ) : (
+                    <div className="text-white text-lg break-words">
+                        {type === "date" ? new Date(value).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        }) : value}
+                    </div>
+                )}
+            </div>
+        </div>
+    </div>
+);
+
 function OwnerDetails({ isExpanded, setIsExpanded }) {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
@@ -55,58 +108,6 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
             icon: <User size={16} className="text-[#eba312]" />
         }
     ];
-
-    const ProfileField = ({ icon, label, value, field, type = "text", editable = true }) => (
-        <div className="group bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4 hover:border-[#eba312]/30 transition-all duration-300">
-            <div className="flex items-start space-x-3">
-                <div className="p-2 bg-[#eba312]/20 rounded-lg group-hover:bg-[#eba312]/30 transition-colors duration-300">
-                    {icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                    <label className="text-sm font-medium text-[#eba312] block mb-2">
-                        {label}
-                    </label>
-                    {isEditing && editable ? (
-                        type === "select" ? (
-                            <select
-                                value={value}
-                                onChange={(e) => handleInputChange(field, e.target.value)}
-                                className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300"
-                            >
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        ) : type === "textarea" ? (
-                            <textarea
-                                value={value}
-                                onChange={(e) => handleInputChange(field, e.target.value)}
-                                rows={2}
-                                className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300 resize-none"
-                                placeholder={`Enter your ${label.toLowerCase()}`}
-                            />
-                        ) : (
-                            <input
-                                type={type}
-                                value={value}
-                                onChange={(e) => handleInputChange(field, e.target.value)}
-                                className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:border-[#eba312] focus:ring-2 focus:ring-[#eba312]/20 focus:outline-none transition-all duration-300"
-                                placeholder={`Enter your ${label.toLowerCase()}`}
-                            />
-                        )
-                    ) : (
-                        <div className="text-white text-lg break-words">
-                            {type === "date" ? new Date(value).toLocaleDateString('en-US', { 
-                                year: 'numeric', 
-                                month: 'long', 
-                                day: 'numeric' 
-                            }) : value}
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
 
     return (
         <MainLayout 
@@ -183,6 +184,8 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
                         label="Full Name"
                         value={formData.name}
                         field="name"
+                        isEditing={isEditing}
+                        onInputChange={handleInputChange}
                     />
                     
                     <ProfileField 
@@ -191,6 +194,8 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
                         value={formData.phone}
                         field="phone"
                         type="tel"
+                        isEditing={isEditing}
+                        onInputChange={handleInputChange}
                     />
                     
                     <ProfileField 
@@ -199,6 +204,8 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
                         value={formData.email}
                         field="email"
                         type="email"
+                        isEditing={isEditing}
+                        onInputChange={handleInputChange}
                     />
                     
                     <ProfileField 
@@ -207,6 +214,8 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
                         value={formData.dateOfBirth}
                         field="dateOfBirth"
                         type="date"
+                        isEditing={isEditing}
+                        onInputChange={handleInputChange}
                     />
                     
                     <ProfileField 
@@ -215,6 +224,8 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
                         value={formData.gender}
                         field="gender"
                         type="select"
+                        isEditing={isEditing}
+                        onInputChange={handleInputChange}
                     />
                     
                     <ProfileField 
@@ -223,6 +234,8 @@ function OwnerDetails({ isExpanded, setIsExpanded }) {
                         value={formData.address}
                         field="address"
                         type="textarea"
+                        isEditing={isEditing}
+                        onInputChange={handleInputChange}
                     />
                 </div>
             </div>

@@ -23,7 +23,7 @@ function MainLayout({ children, title, description }) {
             <Sidebar isExpanded={isExpanded} toggleSidebar={() => setIsExpanded(!isExpanded)} />
 
             <div className="flex-1 transition-all duration-300">
-                <Navbar isExpanded={isExpanded} />
+                <Navbar isExpanded={isExpanded} toggleSidebar={() => setIsExpanded(!isExpanded)} />
 
                 <div className={`
                     text-white transition-all duration-300
